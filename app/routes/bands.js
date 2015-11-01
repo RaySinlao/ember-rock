@@ -1,24 +1,6 @@
 import Ember from 'ember';
-
-// ---------------------------
-// Create a Band Class
-
-var Band = Ember.Object.extend({
-  name: '',
-  slug: Ember.computed('name', function() {
-    return this.get('name').dasherize();
-  }),
-});
-
-
-// ---------------------------
-// Create a Song Class
-
-var Song = Ember.Object.extend({
-  title: '',
-  rating: 0,
-  band: ''
-});
+import Band from '../models/band';
+import Song from '../models/song';
 
 
 // ---------------------------
@@ -92,5 +74,15 @@ bands.get('content').pushObjects([ledZeppelin, pearlJam, fooFighters]);
 export default Ember.Route.extend({
   model: function() {
     return bands;
+  },
+
+  actions: {
+    createBand: function() {
+      var name = this.get('controller').get('name');
+      var band = Band.create({ name: name });
+      
+      bands.get('content').pushObject(band);
+      this.get('controller').set('name', '');
+    }
   }
 });
