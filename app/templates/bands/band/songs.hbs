@@ -9,10 +9,10 @@
     
     <!-- Creates a list of songs -->
     {{#each model.songs as |song|}}
-    <li class="list-group-item song">
-      {{song.title}}
-      <span class="rating pull-right">{{song.rating}}</span>
-    </li>
+      <li class="list-group-item song">
+        {{song.title}}
+        {{star-rating item=song rating=song.rating setAction="updateRating"}}
+      </li>
     {{/each}}
 
   </ul>
