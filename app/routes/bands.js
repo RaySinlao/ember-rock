@@ -42,7 +42,7 @@ var BandsCollection = Ember.Object.extend({
 
 
 // ---------------------------
-// Adding songs
+// Adding bands
 
 var ledZeppelin = Band.create({
   name: 'Led Zeppelin',
