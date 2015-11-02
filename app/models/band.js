@@ -3,6 +3,7 @@ import Ember from 'ember';
 
 export default Ember.Object.extend({
   name: '',
+  description: '',
 
   /*
    * If you don't explicitly pass in an empty songs array for each band object you create, 

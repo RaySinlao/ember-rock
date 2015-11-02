@@ -51,6 +51,7 @@ var ledZeppelin = Band.create({
 
 var pearlJam = Band.create({
   name: 'Pearl Jam',
+  description: 'Pearl Jam is an American rock band, formed in Seattle, Washington in 1990.',
   songs: [daughter, yellowLedbetter]
 });
 
@@ -76,7 +77,18 @@ export default Ember.Route.extend({
     return bands;
   },
 
+  afterModel: function(model){
+    var bands = model;
+    if (bands.length === 1) {
+      this.transitionTo('bands.band', bands.get('firstObject'));
+    }
+  },
+
   actions: {
+    didTransition: function() {
+      document.title = 'Bands - Rock & Roll';
+    },
+
     createBand: function() {
       var name = this.get('controller').get('name');
       var band = Band.create({ name: name });
