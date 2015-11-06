@@ -7,4 +7,9 @@ function selectBand(app, name) {
   return app.testHelpers.wait();
 }
 
-Ember.Test.registerAsyncHelper('selectBand', selectBand)
+function submit(app, selector) {
+  triggerEvent(selector, 'submit');
+}
+
+Ember.Test.registerAsyncHelper('selectBand', selectBand);
+Ember.Test.registerAsyncHelper('submit', submit);

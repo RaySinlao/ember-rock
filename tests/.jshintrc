@@ -24,7 +24,9 @@
     "currentRouteName",
     "assertTrimmedText",
     "assertLength",
-    "assertElement"
+    "assertElement",
+    "selectBand",
+    "submit"
   ],
   "node": false,
   "browser": false,

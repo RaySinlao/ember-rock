@@ -1,11 +1,8 @@
 import Ember from 'ember';
-import {
-  module, test
-}
-from 'qunit';
-
+import { module, test } from 'qunit';
 import startApp from 'rarwe/tests/helpers/start-app';
 import Pretender from 'pretender';
+import httpStubs from '../helpers/http-stubs';
 
 var server;
 
@@ -28,40 +25,17 @@ module('Acceptance | bands', {
 test('Create a new band', function(assert) {
   server = new Pretender(function() {
 
-    this.get('/bands', function() {
-      var response = {
-        data: [{
-          id: 1,
-          type: "bands",
-          attributes: {
-            name: "Radiohead"
-          }
-        }]
-      };
+    httpStubs.stubBands(this, [
+      {
+        id: 1,
+        attributes: {
+          name: "Radiohead"
+        }
+      }
+    ]);
 
-      return [200, {
-        "Content-Type": "application/vnd.api+json"
-      }, JSON.stringify(response)];
-
-    });
-
-    this.post('/bands', function() {
-      var response = {
-        data: [{
-          id: 2,
-          type: "bands",
-          attributes: {
-            name: "Long Distance Calling"
-          }
-        }]
-      };
-
-      return [200, {
-        "Content-Type": "application/vnd.api+json"
-      }, JSON.stringify(response)];
-
-    });
-
+    httpStubs.stubCreateBand(this, 2);
+    
   });
 
   visit('/bands');
@@ -86,7 +60,7 @@ test('Create a new song in two steps', function(assert) {
 
     this.get('/bands', function() {
 
-      var response = {
+      var bands = JSON.stringify({
         data: [
           {
             id: 1,
@@ -96,14 +70,14 @@ test('Create a new song in two steps', function(assert) {
             }
           }
         ]
-      };
+      });
 
-      return [200, { "Content-Type": "application/vnd.api+json" }, JSON.stringify(response)];
+      return [200, { "Content-Type": "application/vnd.api+json" }, bands];
 
     });
 
     this.post('/songs', function() {
-      var response = {
+      var song = JSON.stringify({
         data: [
           {
             id: 1,
@@ -113,20 +87,18 @@ test('Create a new song in two steps', function(assert) {
             }
           }
         ]
-      };
+      });
 
-      return [200, { "Content-Type": "application/vnd.api+json" }, JSON.stringify(response)];
+      return [200, { "Content-Type": "application/vnd.api+json" }, song];
 
     });
 
     // Goes to homepage 
-    visit('/');
-
-
+    selectBand('Radiohead');
     click('.band-link:contains("Radiohead")');
     click('a:contains("create one")');
     fillIn('.new-song', 'Killer Cars');
-    triggerEvent('.new-song-form', 'submit');
+    submit('.new-song-form');
 
     andThen(function() {
       assertElement(assert, '.songs .song:contains("Killer Cars")', "Creates the song and displays it in the list");    
