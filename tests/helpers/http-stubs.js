@@ -17,7 +17,7 @@ function responseItemForBand(data, id) {
         }
       }
     }
-  }
+  };
 }
 
 function responseItemForSong(data, id) {
@@ -46,7 +46,7 @@ export default {
     });
 
     pretender.get(songsUrlForBand(bandId), function() {
-      return [200, { "Content-Type": "application/vnd.api+json" }, JSON.stringify({ data: response})]
+      return [200, { "Content-Type": "application/vnd.api+json" }, JSON.stringify({ data: response})];
     });
   },
 
@@ -71,4 +71,4 @@ export default {
       return [200, {"Content-Type": "application/vnd.api+json"}, JSON.stringify({ data: response }) ];
     }); 
   }
-}
+};
