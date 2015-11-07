@@ -2,6 +2,9 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 
+  sortProperties: ['rating:desc', 'title:asc'],
+  sortedSongs: Ember.computed.sort('model.songs', 'sortProperties'),
+
   songCreationStarted: false,
 
   canCreateSong: Ember.computed('songCreationStarted', 'model.songs.length', function() {
