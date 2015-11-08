@@ -1,8 +1,5 @@
 import Ember from 'ember';
-import {
-  module, test
-}
-from 'qunit';
+import { module, test } from 'qunit';
 import startApp from 'rarwe/tests/helpers/start-app';
 import Pretender from 'pretender';
 import httpStubs from '../helpers/http-stubs';
@@ -18,6 +15,69 @@ module('Acceptance | bands', {
     Ember.run(this.application, 'destroy');
     server.shutdown();
   }
+});
+
+
+test('Search songs', (assert) => {
+  server = new Pretender(function(){
+    httpStubs.stubBands(this, [
+      {
+        id: 1,
+        attributes: {
+          name: "Them Crooked Vultures"
+        }
+      }
+    ]);
+
+    httpStubs.stubSongs(this, 1, [
+    {
+      id: 1,
+      attributes: {
+        title: "Elephants",
+        rating: 5
+      }
+    }, {
+      id: 2,
+      attributes: {
+        title: "New Fang",
+        rating: 4
+      }
+    }, {
+      id: 3,
+      attributes: {
+        title: "Mind Eraser, No Chaser",
+        rating: 4
+      }
+    }, {
+      id: 4,
+      attributes: {
+        title: "Spinning in Daffodils",
+        rating: 5
+      }
+    }, {
+      id: 5,
+      type: "songs",
+      attributes: {
+        title: "No One Loves Me & Neither Do I",
+        rating: 5
+      }
+    }]);
+  });
+
+  visit('/bands/1');
+  fillIn('.search-field', 'no');
+
+  andThen(() => {
+    assertLength(assert, '.song', 2, "The songs matching the search term are displayed");
+  });
+
+  click('button.sort-title-desc');
+
+  andThen(() => {
+    assertTrimmedText(assert, '.song:first', 'No One Loves Me & Neither Do I', "A matching song that comes later in the alphahet appears on top");
+    assertTrimmedText(assert, '.song:last', 'Mind Eraser, No Chaser', "A matching song that comes sooner in the alphahet appears at the bottom ");
+  });
+
 });
 
 
@@ -185,7 +245,6 @@ test('Create a new song in two steps', function(assert) {
 
 test('List bands', function(assert) {
   server = new Pretender(function() {
-
     this.get('/bands', function() {
 
       var response = {
