@@ -12,11 +12,11 @@ function wait(promise, delay) {
 }
 
 export default Ember.Route.extend({
-  model: function() {
+  model() {
     return this.store.findAll('band');
   },
 
-  afterModel: function(model) {
+  afterModel(model) {
     var bands = model;
     if (bands.length === 1) {
       this.transitionTo('bands.band', bands.get('firstObject'));
@@ -24,11 +24,11 @@ export default Ember.Route.extend({
   },
 
   actions: {
-    didTransition: function() {
+    didTransition() {
       document.title = 'Bands - Rock & Roll';
     },
 
-    createBand: function() {
+    createBand() {
       var route = this,
         controller = this.get('controller');
 
